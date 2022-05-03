@@ -1,5 +1,5 @@
 const Adventurer = require('./adventurer')
-const { CLASSES } = require('../utils/constants')
+const { CLASSES } = require('../../utils/constants')
 
 class Elf extends Adventurer {
   constructor (params) {

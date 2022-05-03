@@ -1,13 +1,14 @@
 const Character = require('./character')
-const { CLASSES, CHARACTER_TYPES } = require('../utils/constants')
+const { CLASSES, CHARACTER_TYPES } = require('../../utils/constants')
 const Knight = require('./knight')
 const Wizard = require('./wizard')
 const Elf = require('./elf')
 
 /**
- * A set of Character definitions that has finished Awakening, and thus can become another Class
- * while retaining the previous Class characteristics and abiliies.
- * Can learn at most (2) Classes (paths)
+ * A set of Character definitions for players that has finished Awakening.
+ * Awakened Characters can learn the skills of another Class while retaining their
+ * previous Class characteristics and abiliies.
+ * Awakened Characters can learn at most (2) Classes (paths)
  */
 class Awakened extends Character {
   constructor (params, newClass) {

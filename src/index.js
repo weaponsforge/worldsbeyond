@@ -1,5 +1,12 @@
-const { Wizard, Knight, Elf, Awakened, Character } = require('./classes')
-console.log('start')
+const {
+  Wizard,
+  Knight,
+  Elf,
+  Awakened,
+  Character
+} = require('./classes/player')
+
+console.log('-------- GAME START --------')
 
 let tarrent = new Wizard({ name: 'tarrent' })
 const hellios = new Knight({ name: 'hellios' })
@@ -32,6 +39,6 @@ hellios.strike()
 avatarr.strike()
 traveler.strike()
 
-tarrent = new Awakened(tarrent, 'elf')
+tarrent = new Awakened(tarrent, 'knight')
 tarrent.log()
 tarrent.strike()
