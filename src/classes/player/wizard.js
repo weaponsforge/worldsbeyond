@@ -1,10 +1,11 @@
 const Adventurer = require('./adventurer')
+const { managlaive, energyball } = require('../skill')
 const { CLASSES } = require('../../utils/constants')
 
 class Wizard extends Adventurer {
   constructor (params) {
     super({ ...params, class: CLASSES.WIZARD })
-    this.skills.push('energyball')
+    this.createSkill(energyball)
 
     this.stats = {
       str: 30,
@@ -12,14 +13,21 @@ class Wizard extends Adventurer {
       vit: 20,
       ener: 200
     }
-  }
 
-  energyball () {
-    console.log('---energyball!')
+    this.skill_list = []
   }
 
   strike () {
-    this.energyball()
+    this.EnergyBall.cast()
+  }
+
+  set (params) {
+    super.set(params)
+
+    if (this.level === 5 && !this.skills.includes('managlaive')) {
+      console.log('Get MANAGLAIVE!')
+      this.createSkill(managlaive)
+    }
   }
 }
 

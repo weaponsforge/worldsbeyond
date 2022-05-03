@@ -9,7 +9,23 @@ const CHARACTER_TYPES = {
   AWAKENED: 'awakened'
 }
 
+const SKILLS_WIZARD = {
+  ENERGYBALL: 'energyball',
+  MANAGLAIVE: 'managlaive'
+}
+
+const SKILLS_KNIGHT = {
+  RAGEFULBLOW: 'ragefulblow'
+}
+
+const SKILLS_ELF = {
+  SHOOT: 'shoot'
+}
+
 module.exports = {
   CLASSES,
-  CHARACTER_TYPES
+  CHARACTER_TYPES,
+  SKILLS_WIZARD,
+  SKILLS_KNIGHT,
+  SKILLS_ELF
 }

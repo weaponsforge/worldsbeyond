@@ -16,7 +16,7 @@ class Character {
     this.server = params.server ?? 'bahr'
     this.guild = params.guild ?? ''
     this.class = params.class ?? 'player'
-    this.paths = params.class ? [params.class] : [this.class]
+    this.paths = [this.class]
     this.skills = params.skills ?? ['walk', 'run', 'strike']
     this.skill_basic = ''
 
@@ -47,7 +47,7 @@ class Character {
         throw new Error('Undefined skill.')
       }
 
-      this[this.skill_basic]()
+      this[this.skill_basic].cast()
     }
   }
 
@@ -103,12 +103,27 @@ class Character {
 
   /**
    * Create a new skill
-   * @param {String} skillName
-   * @param {Function} skill - Function definition of a new skill
+   * @param {Skill} skill - Class definition of a new skill
    */
-  createSkill (skillName, skill) {
-    this[skillName] = skill
-    this.skills.push(skillName)
+  createSkill (skill) {
+    if (this.level < skill.lvl_reqt) {
+      throw new Error(`Skill [${skill.name}] Level requirement not sufficient.`)
+    }
+
+    if (!skill.classes.includes(this.class)) {
+      throw new Error(`Class [${this.class}] cannot learn this skill.`)
+    }
+
+    this[skill.name] = skill
+    this.skills.push(skill.name)
+  }
+
+  showSkills () {
+    console.log(`[ ${this.skills.toString().split(',').join(' | ')} ]`)
+  }
+
+  get () {
+    return this
   }
 
   log () {

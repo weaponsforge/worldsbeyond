@@ -1,8 +1,19 @@
 const Character = require('./character')
-const { CLASSES, CHARACTER_TYPES } = require('../../utils/constants')
+const {
+  CLASSES,
+  CHARACTER_TYPES,
+  SKILLS_WIZARD, SKILLS_KNIGHT, SKILLS_ELF
+} = require('../../utils/constants')
+
+// Classes
 const Knight = require('./knight')
 const Wizard = require('./wizard')
 const Elf = require('./elf')
+
+// Skills
+const {
+  energyball, ragefulblow, shoot
+} = require('../skill')
 
 /**
  * A set of Character definitions for players that has finished Awakening.
@@ -41,37 +52,47 @@ class Awakened extends Character {
   }
 
   init (params, newClass) {
-    // Set the basic skill from previous Class
+    this.class = CHARACTER_TYPES.AWAKENED
+    this.paths.push(newClass)
+    let skills = []
+
+    // Copy the skills from previous Class
     switch (params.class) {
     case CLASSES.WIZARD:
-      this.energyball = params.energyball
+      skills = Object.values(SKILLS_WIZARD)
       break
     case CLASSES.KNIGHT:
-      this.ragefulblow = params.ragefulblow
+      skills = Object.values(SKILLS_KNIGHT)
       break
     case CLASSES.ELF:
-      this.shoot = params.shoot
+      skills = Object.values(SKILLS_ELF)
       break
     default: break
     }
 
-    // Set the Awakened Skills
+    skills.forEach(skill => {
+      if (params[skill] !== undefined) {
+        this[skill] = params[skill]
+      }
+    })
+
+    // Set the Awakened (Basic) Skills
     let temp
     switch (newClass) {
     case CLASSES.KNIGHT:
       temp = new Knight({ name: 'temp' })
-      this.createSkill('ragefulblow', temp.ragefulblow)
-      this.setBasicSkill('ragefulblow')
+      this.createSkill(ragefulblow)
+      this.setBasicSkill(ragefulblow.name)
       break
     case CLASSES.WIZARD:
       temp = new Wizard({ name: 'temp' })
-      this.createSkill('energyball', temp.energyball)
-      this.setBasicSkill('energyball')
+      this.createSkill(energyball)
+      this.setBasicSkill(energyball.name)
       break
     case CLASSES.ELF:
       temp = new Elf({ name: 'temp' })
-      this.createSkill('shoot', temp.shoot)
-      this.setBasicSkill('shoot')
+      this.createSkill(shoot)
+      this.setBasicSkill(shoot.name)
       break
     default: break
     }
@@ -84,8 +105,6 @@ class Awakened extends Character {
     })
 
     temp = null
-    this.class = CHARACTER_TYPES.AWAKENED
-    this.paths.push(newClass)
   }
 
   updateStats (stat, points) {

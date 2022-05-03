@@ -1,10 +1,11 @@
 const Adventurer = require('./adventurer')
+const { ragefulblow } = require('../skill')
 const { CLASSES } = require('../../utils/constants')
 
 class Knight extends Adventurer {
   constructor (params) {
     super({ ...params, class: CLASSES.KNIGHT })
-    this.skills.push('ragefulblow')
+    this.createSkill(ragefulblow)
 
     this.stats = {
       str: 180,
@@ -14,12 +15,8 @@ class Knight extends Adventurer {
     }
   }
 
-  ragefulblow () {
-    console.log('---rageful blow!')
-  }
-
   strike () {
-    this.ragefulblow()
+    this.RagefulBlow.cast()
   }
 }
 
