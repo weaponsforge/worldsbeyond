@@ -1,41 +1,29 @@
-const { Wizard, Knight, Elf, Character } = require('./classes')
+const { Wizard, Knight, Elf, Awakened, Character } = require('./classes')
 console.log('start')
 
-const tarrent = new Wizard({ name: 'tarrent' })
-console.log(`created ${tarrent.class} "${tarrent.name}"`)
-console.log(tarrent.stats)
-
+let tarrent = new Wizard({ name: 'tarrent' })
 const hellios = new Knight({ name: 'hellios' })
-console.log(`created ${hellios.class} "${hellios.name}"`)
-console.log(hellios.stats)
-
 const avatarr = new Elf({ name: 'avatar' })
-console.log(`created ${avatarr.class} "${avatarr.name}"`)
-console.log(avatarr.stats)
-
 const traveler = new Character({ name: 'player_one' })
-console.log(`created ${traveler.class} "${traveler.name}"`)
 
 try {
-  tarrent.updateStats('ener', 1000)
-  console.log(`--${tarrent.name} stats`)
-  console.log(tarrent.stats)
+  tarrent.updateStats('ener', 500)
+  tarrent.set({ guild: 'kobalos', level: 99 })
+  tarrent.log()
 } catch (err) {
   console.log(`ERROR: ${err.message}`)
 }
 
 try {
   hellios.updateStats('str', 110)
-  console.log(`--${hellios.name} stats`)
-  console.log(hellios.stats)
+  hellios.log()
 } catch (err) {
   console.log(`ERROR: ${err.message}`)
 }
 
 try {
   traveler.updateStats('str', 5000)
-  console.log(`--${traveler.name} stats`)
-  console.log(traveler.stats)
+  traveler.log()
 } catch (err) {
   console.log(`ERROR: ${err.message}`)
 }
@@ -44,3 +32,6 @@ tarrent.strike()
 hellios.strike()
 avatarr.strike()
 traveler.strike()
+
+tarrent = new Awakened(tarrent, 'knight')
+tarrent.log()

@@ -6,7 +6,7 @@ const CLASSES = {
 
 const CHARACTER_TYPES = {
   ADVENTURER: 'adventurer',
-  TRANSCENDED: 'transended'
+  AWAKENED: 'awakened'
 }
 
 module.exports = {
