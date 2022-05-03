@@ -76,8 +76,14 @@ class Awakened extends Character {
     default: break
     }
 
-    temp = null
+    // Increment the Awakened stats
+    Object.keys(temp.stats).forEach(item => {
+      const bonus = 400
+      const tempStat = temp.stats[item] + bonus
+      this.updateStats(item, tempStat)
+    })
 
+    temp = null
     this.class = CHARACTER_TYPES.AWAKENED
     this.paths.push(newClass)
   }
