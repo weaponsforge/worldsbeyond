@@ -79,7 +79,7 @@ class Character {
     fields.splice(fields.indexOf('stats'), 1)
     fields.splice(fields.indexOf('maxStats'), 1)
     fields.splice(fields.indexOf('paths'), 1)
-    fields.splice(fields.indexOf('skill'), 1)
+    fields.splice(fields.indexOf('skills'), 1)
 
     if (!keys.every(x => fields.includes(x))) {
       throw new Error('Invalid parameter(s).')
