@@ -1,11 +1,12 @@
 const Adventurer = require('./adventurer')
+const { CLASSES } = require('../utils/constants')
 
 class Knight extends Adventurer {
   constructor (params) {
-    super({ ...params, class: 'knight' })
+    super({ ...params, class: CLASSES.KNIGHT })
 
     this.stats = {
-      str: 150,
+      str: 180,
       agi: 50,
       vit: 30,
       ener: 30

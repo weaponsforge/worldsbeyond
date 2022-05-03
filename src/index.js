@@ -1,4 +1,4 @@
-const { Wizard, Knight, Character } = require('./classes')
+const { Wizard, Knight, Elf, Character } = require('./classes')
 console.log('start')
 
 const tarrent = new Wizard({ name: 'tarrent' })
@@ -8,6 +8,10 @@ console.log(tarrent.stats)
 const hellios = new Knight({ name: 'hellios' })
 console.log(`created ${hellios.class} "${hellios.name}"`)
 console.log(hellios.stats)
+
+const avatarr = new Elf({ name: 'avatar' })
+console.log(`created ${avatarr.class} "${avatarr.name}"`)
+console.log(avatarr.stats)
 
 const traveler = new Character({ name: 'player_one' })
 console.log(`created ${traveler.class} "${traveler.name}"`)
@@ -38,4 +42,5 @@ try {
 
 tarrent.strike()
 hellios.strike()
+avatarr.strike()
 traveler.strike()
