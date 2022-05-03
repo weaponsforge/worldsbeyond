@@ -73,21 +73,18 @@ class Character {
       throw new Error('Undefined parameters')
     }
 
-    const fields = Object.keys(this)
+    const fields = ['stats', 'maxStats', 'paths', 'skills']
     const keys = Object.keys(params)
 
-    fields.splice(fields.indexOf('stats'), 1)
-    fields.splice(fields.indexOf('maxStats'), 1)
-    fields.splice(fields.indexOf('paths'), 1)
-    fields.splice(fields.indexOf('skills'), 1)
-
-    if (!keys.every(x => fields.includes(x))) {
-      throw new Error('Invalid parameter(s).')
+    if (keys.length > Object.keys(this).length) {
+      throw new Error('Too many parameters.')
     }
 
-    fields.forEach(item => {
-      if (params[item] !== undefined) {
+    keys.forEach(item => {
+      if (this[item] !== undefined && !fields.includes(item)) {
         this[item] = params[item]
+      } else {
+        throw new Error(`Invalid parameter '${item}'`)
       }
     })
   }
