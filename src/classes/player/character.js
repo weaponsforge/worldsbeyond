@@ -70,7 +70,7 @@ class Character {
       }
 
       if (allow) {
-        this.activeStats.dmg = this[this.skill_active].damage * this.level
+        this.activeStats.dmg = this[this.skill_active].damage
         this.activeStats.mana -= this[this.skill_active].mana_cost
         this.activeStats.asr = this.attackSuccessRate()
         this[this.skill_active].cast()
@@ -146,10 +146,11 @@ class Character {
     }
 
     this.skill_active = skill
+    this.activeStats.dmg = this[this.skill_active].damage
   }
 
   /**
-   * Increment the main stats and activeStats per level increment
+   * Increment/decrement the main stats, activeStats and skills damage per level increment
    * @param {Number} level
    */
   levelUpStats (level) {
@@ -161,6 +162,10 @@ class Character {
     for (const stat in this.stats) {
       this.updateStats(stat, POINTS_PER_LEVEL * increment * ((level < this.level) ? -1 : 1))
     }
+
+    this.skills.forEach(skill => {
+      this[skill].damage += this[skill].baseDamage * increment
+    })
   }
 
   takeDamge (damage) {
@@ -192,6 +197,7 @@ class Character {
 
     if (allowed) {
       this[skill.name] = skill
+      this[skill.name].damage = this[skill.name].baseDamage * this.level
       this.skills.push(skill.name)
     } else {
       throw new Error(errMsg)

@@ -12,6 +12,7 @@ class Skill {
     this.lvl_reqt = params.lvl_reqt ?? 0
     this.classes = params.classes ?? []
     this.mana_cost = params.mana_cost ?? 0
+    this.baseDamage = params.damage ?? 0
     this.damage = params.damage ?? 0
   }
 
