@@ -49,7 +49,7 @@ class Character {
 
   // Normal attack
   attack () {
-    this.activeStats.dmg = 1
+    this.activeStats.dmg = this.normalAttackDmg()
     this.activeStats.asr = this.attackSuccessRate()
     console.log(`---attack: ${this.name}`)
     console.log(this.name, this.activeStats)
@@ -146,16 +146,29 @@ class Character {
    * @param {Skill} skill - Class definition of a new skill
    */
   createSkill (skill) {
-    if (this.level < skill.lvl_reqt) {
-      throw new Error(`Skill [${skill.name}] Level requirement not sufficient.`)
+    let allowed = (this.class === CHARACTER_TYPES.PLAYER)
+    let errMsg = ''
+
+    if (this.class !== CHARACTER_TYPES.PLAYER) {
+      allowed = true
+
+      if (this.level < skill.lvl_reqt) {
+        errMsg += `Skill [${skill.name}] Level requirement not sufficient.`
+        allowed = false
+      }
+
+      if (!skill.classes.includes(this.class)) {
+        errMsg += `\nClass [${this.class}] cannot learn this skill.`
+        allowed = false
+      }
     }
 
-    if (!skill.classes.includes(this.class)) {
-      throw new Error(`Class [${this.class}] cannot learn this skill.`)
+    if (allowed) {
+      this[skill.name] = skill
+      this.skills.push(skill.name)
+    } else {
+      throw new Error(errMsg)
     }
-
-    this[skill.name] = skill
-    this.skills.push(skill.name)
   }
 
   showSkills () {
@@ -166,6 +179,10 @@ class Character {
     const max = 100
     const min = 1
     return Math.floor(Math.random() * (max - min) + min)
+  }
+
+  normalAttackDmg () {
+    return 1
   }
 
   isDefeated () {

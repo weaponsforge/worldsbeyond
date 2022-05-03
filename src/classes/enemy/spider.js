@@ -6,7 +6,8 @@ class Spider extends Enemy {
     this.activeStats = {
       dmg: 2,
       hp: 20,
-      ener: 10
+      ener: 10,
+      asr: 0
     }
   }
 }
