@@ -7,7 +7,9 @@ const { Spider } = require('./classes/enemy')
 console.log('-------- GAME START --------')
 
 const player = new Wizard({ name: 'player' })
-const spider = new Spider()
+player.set({ level: 5 })
+player.setActiveSkill('ManaGlaive')
+const spider = new Spider({ level: 8 })
 
 let turn = 1
 

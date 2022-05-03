@@ -70,7 +70,7 @@ class Character {
       }
 
       if (allow) {
-        this.activeStats.dmg = this[this.skill_active].damage
+        this.activeStats.dmg = this[this.skill_active].damage * this.level
         this.activeStats.mana -= this[this.skill_active].mana_cost
         this.activeStats.asr = this.attackSuccessRate()
         this[this.skill_active].cast()
@@ -93,6 +93,14 @@ class Character {
     }
 
     this.stats[stat] += points
+
+    if (stat === 'vit') {
+      this.activeStats.hp += points
+    }
+
+    if (stat === 'ener') {
+      this.activeStats.mana += points
+    }
   }
 
   /**
@@ -113,6 +121,10 @@ class Character {
 
     keys.forEach(item => {
       if (this[item] !== undefined && !fields.includes(item)) {
+        if (item === 'level') {
+          this.levelUp(params[item])
+        }
+
         this[item] = params[item]
       } else {
         throw new Error(`Invalid parameter '${item}'`)
@@ -134,6 +146,19 @@ class Character {
     }
 
     this.skill_active = skill
+  }
+
+  levelUp (level) {
+    if (level <= 0) {
+      throw new Error('Invalid level value.')
+    }
+
+    const increment = Math.abs(level - this.level)
+    const pointsPerLevel = 5
+
+    for (const stat in this.stats) {
+      this.updateStats(stat, pointsPerLevel * increment * ((level < this.level) ? -1 : 1))
+    }
   }
 
   takeDamge (damage) {
@@ -182,7 +207,7 @@ class Character {
   }
 
   normalAttackDmg () {
-    return 1
+    return 1 * this.level
   }
 
   isDefeated () {
