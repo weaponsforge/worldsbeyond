@@ -6,7 +6,7 @@ class RagefulBlow extends Skill {
     super({
       name: 'RagefulBlow',
       lvl_reqt: 1,
-      classes: [CLASSES.KNIGHT, CHARACTER_TYPES.AWAKENED],
+      classes: [CLASSES.KNIGHT, CHARACTER_TYPES.AWAKENED, CHARACTER_TYPES.PLAYER],
       mana_cost: 2,
       damage: 5
     })

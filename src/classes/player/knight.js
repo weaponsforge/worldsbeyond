@@ -6,6 +6,7 @@ class Knight extends Adventurer {
   constructor (params) {
     super({ ...params, class: CLASSES.KNIGHT })
     this.createSkill(ragefulblow)
+    this.setActiveSkill(ragefulblow.name)
 
     this.stats = {
       str: 180,
@@ -13,10 +14,6 @@ class Knight extends Adventurer {
       vit: 30,
       ener: 30
     }
-  }
-
-  strike () {
-    this.RagefulBlow.cast()
   }
 }
 

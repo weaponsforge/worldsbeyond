@@ -5,6 +5,7 @@ const CLASSES = {
 }
 
 const CHARACTER_TYPES = {
+  PLAYER: 'player',
   ADVENTURER: 'adventurer',
   AWAKENED: 'awakened'
 }

@@ -6,6 +6,7 @@ class Wizard extends Adventurer {
   constructor (params) {
     super({ ...params, class: CLASSES.WIZARD })
     this.createSkill(energyball)
+    this.setActiveSkill(energyball.name)
 
     this.stats = {
       str: 30,
@@ -14,11 +15,8 @@ class Wizard extends Adventurer {
       ener: 200
     }
 
-    this.skill_list = []
-  }
-
-  strike () {
-    this.EnergyBall.cast()
+    this.activeStats.mana = this.stats.ener
+    this.activeStats.hp = this.stats.vit
   }
 
   set (params) {

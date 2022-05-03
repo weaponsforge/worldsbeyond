@@ -82,17 +82,17 @@ class Awakened extends Character {
     case CLASSES.KNIGHT:
       temp = new Knight({ name: 'temp' })
       this.createSkill(ragefulblow)
-      this.setBasicSkill(ragefulblow.name)
+      this.setActiveSkill(ragefulblow.name)
       break
     case CLASSES.WIZARD:
       temp = new Wizard({ name: 'temp' })
       this.createSkill(energyball)
-      this.setBasicSkill(energyball.name)
+      this.setActiveSkill(energyball.name)
       break
     case CLASSES.ELF:
       temp = new Elf({ name: 'temp' })
       this.createSkill(shoot)
-      this.setBasicSkill(shoot.name)
+      this.setActiveSkill(shoot.name)
       break
     default: break
     }

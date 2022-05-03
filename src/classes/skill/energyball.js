@@ -6,7 +6,7 @@ class EnergyBall extends Skill {
     super({
       name: 'EnergyBall',
       lvl_reqt: 1,
-      classes: [CLASSES.WIZARD, CHARACTER_TYPES.AWAKENED],
+      classes: [CLASSES.WIZARD, CHARACTER_TYPES.AWAKENED, CHARACTER_TYPES.PLAYER],
       mana_cost: 2,
       damage: 5
     })

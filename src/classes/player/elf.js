@@ -6,6 +6,7 @@ class Elf extends Adventurer {
   constructor (params) {
     super({ ...params, class: CLASSES.ELF })
     this.createSkill(shoot)
+    this.setActiveSkill(shoot.name)
 
     this.stats = {
       str: 50,
@@ -13,10 +14,6 @@ class Elf extends Adventurer {
       vit: 20,
       ener: 100
     }
-  }
-
-  strike () {
-    this.Shoot.cast()
   }
 }
 
