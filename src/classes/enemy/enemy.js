@@ -39,7 +39,7 @@ class Enemy {
   }
 
   isDefeated () {
-    return this.activeStats.hp < 0
+    return this.activeStats.hp <= 0
   }
 
   log () {

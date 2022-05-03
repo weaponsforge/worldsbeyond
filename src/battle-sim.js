@@ -41,6 +41,6 @@ if (spider.activeStats.hp > 0) {
   console.log('ENEMY wins')
 }
 
-if (player.activeStats.hp === spider.activeStats.hp) {
-  console.log('DRAW')
+if (player.activeStats.hp <= 0 && spider.activeStats.hp <= 0) {
+  console.log('NO WINNER. ALL DEDZ.')
 }

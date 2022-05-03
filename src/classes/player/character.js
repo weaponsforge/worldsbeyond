@@ -1,4 +1,4 @@
-const { CHARACTER_TYPES } = require('../../utils/constants')
+const { CHARACTER_TYPES, POINTS_PER_LEVEL } = require('../../utils/constants')
 
 /**
  * Base Class of all Character classes
@@ -122,7 +122,7 @@ class Character {
     keys.forEach(item => {
       if (this[item] !== undefined && !fields.includes(item)) {
         if (item === 'level') {
-          this.levelUp(params[item])
+          this.levelUpStats(params[item])
         }
 
         this[item] = params[item]
@@ -148,16 +148,18 @@ class Character {
     this.skill_active = skill
   }
 
-  levelUp (level) {
+  /**
+   * Increment the main stats and activeStats per level increment
+   * @param {Number} level
+   */
+  levelUpStats (level) {
     if (level <= 0) {
       throw new Error('Invalid level value.')
     }
 
     const increment = Math.abs(level - this.level)
-    const pointsPerLevel = 5
-
     for (const stat in this.stats) {
-      this.updateStats(stat, pointsPerLevel * increment * ((level < this.level) ? -1 : 1))
+      this.updateStats(stat, POINTS_PER_LEVEL * increment * ((level < this.level) ? -1 : 1))
     }
   }
 
