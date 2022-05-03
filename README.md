@@ -4,7 +4,7 @@ A game set in a medieval-fantasy setting where characters find their life's mean
 
 All characters have pre-defined roles and paths, except for a certain Character. Or several Characters.
 
-> This is an experiment on constructing game classes, models and objects.
+> Experiment game testing the construction of game classes, models, objects and events on NodeJS.
 
 
 ### Requirements
