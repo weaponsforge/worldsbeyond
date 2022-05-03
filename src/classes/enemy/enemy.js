@@ -9,6 +9,7 @@ class Enemy {
     }
 
     this.name = params.name ?? 'enemy'
+    this.level = params.level ?? 1
     this.activeStats = params.activeStats ?? {
       dmg: 1,
       hp: 10,
