@@ -4,7 +4,8 @@
   "description": "A game set in a medieval-fantasy setting where character find meaning and purpose in their life and the world.",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node src/index",
+    "battle": "node src/battle-sim",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix"
   },

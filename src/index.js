@@ -34,11 +34,12 @@ try {
   console.log(`ERROR: ${err.message}`)
 }
 
-tarrent.strike()
-hellios.strike()
-avatarr.strike()
-traveler.strike()
+tarrent.skill_attack()
+tarrent.attack()
+hellios.skill_attack()
+avatarr.skill_attack()
+traveler.skill_attack()
 
 tarrent = new Awakened(tarrent, 'knight')
 tarrent.log()
-tarrent.strike()
+tarrent.skill_attack()

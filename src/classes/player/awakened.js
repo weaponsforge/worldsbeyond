@@ -48,6 +48,7 @@ class Awakened extends Character {
       ener: 2000
     }
 
+    this.activeStats = params.activeStats
     this.init(params, newClass)
   }
 
@@ -102,6 +103,14 @@ class Awakened extends Character {
       const bonus = 400
       const tempStat = temp.stats[item] + bonus
       this.updateStats(item, tempStat)
+
+      if (item === 'vit') {
+        this.activeStats.hp += tempStat
+      }
+
+      if (item === 'ener') {
+        this.activeStats.mana += tempStat
+      }
     })
 
     temp = null

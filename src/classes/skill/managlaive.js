@@ -8,7 +8,7 @@ class ManaGlaive extends Skill {
       lvl_reqt: 5,
       classes: [CLASSES.WIZARD, CHARACTER_TYPES.AWAKENED, CHARACTER_TYPES.PLAYER],
       mana_cost: 15,
-      damage: 35
+      damage: 8
     })
   }
 }

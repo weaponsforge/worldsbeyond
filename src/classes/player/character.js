@@ -19,7 +19,7 @@ class Character {
     this.guild = params.guild ?? ''
     this.class = params.class ?? 'player'
     this.paths = [this.class]
-    this.skills = params.skills ?? ['walk', 'run', 'strike', 'skill_attack']
+    this.skills = params.skills ?? ['walk', 'run', 'attack', 'skill_attack']
     this.skill_active = ''
 
     this.stats = params.stats ?? {
@@ -32,7 +32,8 @@ class Character {
     this.activeStats = {
       dmg: 1,
       mana: 10,
-      hp: 10
+      hp: 10,
+      asr: 0
     }
   }
 
@@ -47,17 +48,17 @@ class Character {
   }
 
   // Normal attack
-  strike () {
+  attack () {
     this.activeStats.dmg = 1
-    console.log('---strike')
-    console.log({ ...this.activeStats, ...this.stats })
+    this.activeStats.asr = this.attackSuccessRate()
+    console.log(`---attack: ${this.name}`)
+    console.log(this.name, this.activeStats)
   }
 
   // Active skill attack
   skill_attack () {
     if (this.skill_active === '') {
-      console.log('---normal attack!')
-      this.strike()
+      this.attack()
     } else {
       if (this[this.skill_active] === undefined) {
         throw new Error('Undefined skill.')
@@ -71,10 +72,12 @@ class Character {
       if (allow) {
         this.activeStats.dmg = this[this.skill_active].damage
         this.activeStats.mana -= this[this.skill_active].mana_cost
+        this.activeStats.asr = this.attackSuccessRate()
         this[this.skill_active].cast()
-        console.log({ ...this.activeStats, ...this.stats })
+        console.log(this.name, this.activeStats)
       } else {
         console.log('Insufficient mana. Cannot cast skill.')
+        this.attack()
       }
     }
   }
@@ -135,6 +138,7 @@ class Character {
 
   takeDamge (damage) {
     this.activeStats.hp -= damage
+    console.log(`[${this.name}] take damage ${damage}, hp: ${this.activeStats.hp}`)
   }
 
   /**
@@ -156,6 +160,21 @@ class Character {
 
   showSkills () {
     console.log(`[ ${this.skills.toString().split(',').join(' | ')} ]`)
+  }
+
+  attackSuccessRate () {
+    const max = 100
+    const min = 1
+    return Math.floor(Math.random() * (max - min) + min)
+  }
+
+  isDefeated () {
+    if (this.class === CHARACTER_TYPES.PLAYER) {
+      // Immortal ^_^
+      return false
+    } else {
+      return this.activeStats.hp <= 0
+    }
   }
 
   get () {

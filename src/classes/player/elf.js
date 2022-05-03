@@ -14,6 +14,9 @@ class Elf extends Adventurer {
       vit: 20,
       ener: 100
     }
+
+    this.activeStats.mana = this.stats.ener
+    this.activeStats.hp = this.stats.vit
   }
 }
 

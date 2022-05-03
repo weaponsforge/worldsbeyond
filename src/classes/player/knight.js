@@ -14,6 +14,9 @@ class Knight extends Adventurer {
       vit: 30,
       ener: 30
     }
+
+    this.activeStats.mana = this.stats.ener
+    this.activeStats.hp = this.stats.vit
   }
 }
 

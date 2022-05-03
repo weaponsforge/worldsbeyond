@@ -25,6 +25,8 @@ The following software and dependencies were used during development. Feel free 
 
 1. Run the main program.  
 `npm start`
+2. Run the battle simulation.  
+`npm run battle`
 
 
 ## Available Scrips
@@ -32,6 +34,10 @@ The following software and dependencies were used during development. Feel free 
 ### npm start
 
 Run the main program.
+
+### npm run battle
+
+Run the simulation battle program.
 
 ### npm run lint
 

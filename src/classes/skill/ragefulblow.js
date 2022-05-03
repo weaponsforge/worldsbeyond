@@ -8,7 +8,7 @@ class RagefulBlow extends Skill {
       lvl_reqt: 1,
       classes: [CLASSES.KNIGHT, CHARACTER_TYPES.AWAKENED, CHARACTER_TYPES.PLAYER],
       mana_cost: 2,
-      damage: 5
+      damage: 3
     })
   }
 }
