@@ -2,7 +2,7 @@
 
 A game set in a medieval-fantasy setting where characters find their life's meaning and purpose, and the World's existence.
 
-All characters have pre-defined roles and paths, except for a certain Character. Or several Characters.
+All `Classes` have pre-defined roles and paths, except for a certain `Character`. Or several `Characters`.
 
 > Experiment game testing the construction of game classes, models, objects and events on NodeJS.
 
