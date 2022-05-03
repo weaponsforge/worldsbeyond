@@ -1,5 +1,3 @@
-const { CLASSES } = require('../utils//constants')
-
 /**
  * Base Class of all Character classes
  */
@@ -19,6 +17,8 @@ class Character {
     this.guild = params.guild ?? ''
     this.class = params.class ?? 'player'
     this.paths = params.class ? [params.class] : [this.class]
+    this.skills = params.skills ?? ['walk', 'run', 'strike']
+    this.skill_basic = ''
 
     this.stats = params.stats ?? {
       str: 10,
@@ -28,18 +28,34 @@ class Character {
     }
   }
 
+  // Move towards a specified direction
   walk () {
     console.log('---walking...')
   }
 
+  // Move faster towards a specified direction
   run () {
     console.log('---running...')
   }
 
+  // Basic attack skill
   strike () {
-    console.log('---strike!')
+    if (this.skill_basic === '') {
+      console.log('---strike!')
+    } else {
+      if (this[this.skill_basic] === undefined) {
+        throw new Error('Undefined skill.')
+      }
+
+      this[this.skill_basic]()
+    }
   }
 
+  /**
+   * Update (increment/decrement) a stat point
+   * @param {String} stat Stat name (str, agi, vit, ener)
+   * @param {Number} points (+/-) Number values
+   */
   updateStats (stat, points) {
     if (this.stats[stat] === undefined) {
       throw new Error('Undefined stat.')
@@ -48,35 +64,54 @@ class Character {
     this.stats[stat] += points
   }
 
-  setPaths (newClass) {
-    if (Object.keys(CLASSES).includes(newClass)) {
-      this.paths.push(newClass)
-    }
-  }
-
+  /**
+   * Set the values of first-level Object properties
+   * @param {Object} params { name, level, server, guild, class, skill_basic }
+   */
   set (params) {
     if (params === undefined) {
       throw new Error('Undefined parameters')
     }
 
     const fields = Object.keys(this)
+    const keys = Object.keys(params)
+
     fields.splice(fields.indexOf('stats'), 1)
     fields.splice(fields.indexOf('maxStats'), 1)
     fields.splice(fields.indexOf('paths'), 1)
+    fields.splice(fields.indexOf('skill'), 1)
 
-    const keys = Object.keys(params)
-
-    const validKeys = keys.every(x => fields.includes(x))
-
-    if (!validKeys) {
+    if (!keys.every(x => fields.includes(x))) {
       throw new Error('Invalid parameter(s).')
     }
 
-    fields.forEach((item, index) => {
+    fields.forEach(item => {
       if (params[item] !== undefined) {
         this[item] = params[item]
       }
     })
+  }
+
+  /**
+   * Set the basic (strike) skill
+   * @param {String} skill - Skill name
+   */
+  setBasicSkill (skill) {
+    if (!this.skills.includes(skill)) {
+      throw new Error('Undefined skill.')
+    }
+
+    this.skill_basic = skill
+  }
+
+  /**
+   * Create a new skill
+   * @param {String} skillName
+   * @param {Function} skill - Function definition of a new skill
+   */
+  createSkill (skillName, skill) {
+    this[skillName] = skill
+    this.skills.push(skillName)
   }
 
   log () {

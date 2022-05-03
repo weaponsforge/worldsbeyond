@@ -9,7 +9,6 @@ const traveler = new Character({ name: 'player_one' })
 try {
   tarrent.updateStats('ener', 500)
   tarrent.set({ guild: 'kobalos', level: 99 })
-  tarrent.log()
 } catch (err) {
   console.log(`ERROR: ${err.message}`)
 }
@@ -33,5 +32,6 @@ hellios.strike()
 avatarr.strike()
 traveler.strike()
 
-tarrent = new Awakened(tarrent, 'knight')
+tarrent = new Awakened(tarrent, 'elf')
 tarrent.log()
+tarrent.strike()

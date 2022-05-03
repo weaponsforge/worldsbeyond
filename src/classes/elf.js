@@ -4,6 +4,7 @@ const { CLASSES } = require('../utils/constants')
 class Elf extends Adventurer {
   constructor (params) {
     super({ ...params, class: CLASSES.ELF })
+    this.skills.push('shoot')
 
     this.stats = {
       str: 50,

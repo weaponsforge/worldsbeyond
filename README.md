@@ -1,8 +1,8 @@
 ## worldsbeyond
 
-A game set in a medieval-fantasy setting where character find their life's meaning and purpose, and the World's existence.
+A game set in a medieval-fantasy setting where characters find their life's meaning and purpose, and the World's existence.
 
-All characters have a pre-defined role and path, except for a certain Character. Or several Characters.
+All characters have a pre-defined roles and paths, except for a certain Character. Or several Characters.
 
 
 ### Requirements
