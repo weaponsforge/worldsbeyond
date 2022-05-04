@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node src/index",
     "battle": "node src/battle-sim",
+    "test": "node src/classes/character/test",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix"
   },

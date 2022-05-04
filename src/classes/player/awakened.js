@@ -62,7 +62,82 @@ class Awakened extends Character {
     }
 
     this.init(params, newClass)
-    this.setStats()
+  }
+
+  get defense () {
+    return (this.stats.agi / 2)
+  }
+
+  get defenseRate () {
+    return 1 * (this.stats.agi / 1.5)
+  }
+
+  get elemDef () {
+    return 1 * (this.stats.agi / 2)
+  }
+
+  get elemDefRate () {
+    return 1 * (this.stats.agi / 1.5)
+  }
+
+  get maxAtk () {
+    return 1 * (this.stats.str / 2)
+  }
+
+  get minAtk () {
+    return 1 * (this.stats.str / 4)
+  }
+
+  get maxWizPower () {
+    return (1 * this.stats.ener / 2) + (this[this.skill_active].finalDamage() * 0.5)
+  }
+
+  get minWizPower () {
+    return (1 * this.stats.ener / 4) + this[this.skill_active].finalDamage()
+  }
+
+  get atkRate () {
+    return (this.level / 2) + (0.5 * this.stats.agi) + (1 * this.stats.str / 2)
+  }
+
+  get atkSpeed () {
+    return 1 * (this.stats.agi / 5)
+  }
+
+  get maxElemAtk () {
+    return 1 * (this.stats.ener / 5)
+  }
+
+  get minElemAtk () {
+    return 1 * (this.stats.ener / 5)
+  }
+
+  get elemAtkRate () {
+    return (5 * this.level) + (1.5 * this.stats.agi) + (1 * this.stats.str / 4)
+  }
+
+  get hp () {
+    return (this.level === 1)
+      ? this.stats.hp
+      : this.stats.hp + (1 * this.level) + (1 * this.stats.vit)
+  }
+
+  get mana () {
+    return (this.level === 1)
+      ? this.stats.mana
+      : this.stats.mana + (2 * this.level) + (2 * this.stats.ener)
+  }
+
+  get ag () {
+    return (this.level === 1)
+      ? this.stats.ag
+      : this.stats.ag + (1 * this.stats.str / 5) + (0.4 * this.stats.agi) + (1 * this.stats.vit / 3) + (1 * this.stats.ener / 5)
+  }
+
+  get sd () {
+    return (this.level === 1)
+      ? this.stats.sd
+      : this.stats.sd + (1.2 * this.level) + (1 * this.defense / 2)
   }
 
   init (params, newClass) {
@@ -112,7 +187,7 @@ class Awakened extends Character {
     }
 
     // Increment the Awakened stats
-    this.mainstats.forEach(item => {
+    Object.keys(this.stats).forEach(item => {
       const bonus = 400
       const tempStat = temp.stats[item] + bonus
       this.stats[item] = tempStat
@@ -121,7 +196,7 @@ class Awakened extends Character {
     temp = null
   }
 
-  updateStats (stat, points) {
+  setMainStat (stat, points) {
     if (this.stats[stat] === undefined) {
       throw new Error('Undefined stat.')
     }
@@ -130,46 +205,7 @@ class Awakened extends Character {
       throw new Error('Cannot increase stat further.')
     }
 
-    super.updateStats(stat, points)
-  }
-
-  setStats () {
-    super.setStats()
-
-    // Defense
-    this.stats_def.def = 1 * (this.stats.agi / 4)
-    this.stats_def.defRate = 1 * (this.stats.agi / 3)
-    this.stats_def.elemDef = 1 * (this.stats.agi / 4)
-    this.stats_def.elemDefRate = 1 * (this.stats.agi / 3)
-
-    // Attack
-    this.stats_atk.maxAtk = 1 * (this.stats.str / 8)
-    this.stats_atk.minAtk = 1 * (this.stats.str / 16)
-    this.stats_atk.maxWizPower = (1 * this.stats.ener / 8) + (this[this.skill_active].baseDamage * 3)
-    this.stats_atk.minWizPower = (1 * this.stats.ener / 18) + (this[this.skill_active].baseDamage * 3)
-    this.stats_atk.atkRate = (this.level / 10) + (3 * this.stats.agi) + (1 * this.stats.str / 8)
-    this.stats_atk.atkSpeed = 1 * (this.stats.agi / 15)
-    this.stats_atk.maxElemAtk = 1 * (this.stats.ener / 12)
-    this.stats_atk.minElemAtk = 1 * (this.stats.ener / 18)
-    this.stats_atk.elemAtkRate = (10 * this.level) + (3 * this.stats.agi) + (1 * this.stats.str / 8)
-  }
-
-  setActiveStat (stat, points) {
-    super.setActiveStat(stat, points)
-
-    if (stat === 'vit') {
-      this.stats.hp += (1 * this.level) + (1 * this.stats.vit)
-      this.setStatAG()
-    }
-
-    if (stat === 'ener') {
-      this.stats.mana += (2 * this.level) + (2 * this.stats.ener)
-      this.setStatAG()
-    }
-
-    if (['str', 'agi'].includes(stat)) {
-      this.setStatAG()
-    }
+    super.setMainStat(stat, points)
   }
 }
 

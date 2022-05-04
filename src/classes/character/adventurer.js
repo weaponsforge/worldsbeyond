@@ -8,10 +8,10 @@ class Adventurer extends Character {
     super(params)
 
     this.maxStats = {
-      str: 1000,
-      agi: 1000,
-      vit: 1000,
-      ener: 1000
+      str: 2000,
+      agi: 2000,
+      vit: 2000,
+      ener: 2000
     }
   }
 

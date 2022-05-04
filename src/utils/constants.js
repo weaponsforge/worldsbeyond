@@ -30,6 +30,7 @@ const SKILLS_WIZARD = {
   SOULBARRIER: 'SoulBarrier',
   ICESTORM: 'IceStorm',
   DECAY: 'Decay',
+  METEORSTRIKE: 'MeteorStrike',
   NOVA: 'Nova',
   MANAGLAIVE: 'ManaGlaive'
 }
@@ -53,6 +54,19 @@ const SKILLS_ELF = {
   GREATER_DAMAGE: 'GreaterDamage'
 }
 
+const SKILL_TYPES = {
+  WIND: 'wind',
+  EARTH: 'earth',
+  NONE: 'none-elements'
+}
+
+const MAIN_STATS = {
+  STR: 'str',
+  AGI: 'agi',
+  ENER: 'ener',
+  VIT: 'ener'
+}
+
 const POINTS_PER_LEVEL = 5
 
 module.exports = {
@@ -61,5 +75,7 @@ module.exports = {
   SKILLS_WIZARD,
   SKILLS_KNIGHT,
   SKILLS_ELF,
-  POINTS_PER_LEVEL
+  SKILL_TYPES,
+  POINTS_PER_LEVEL,
+  MAIN_STATS
 }

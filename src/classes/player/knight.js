@@ -5,8 +5,6 @@ const { CLASSES } = require('../../utils/constants')
 class Knight extends Adventurer {
   constructor (params) {
     super({ ...params, class: CLASSES.KNIGHT })
-    this.createSkill(ragefulblow)
-    this.setActiveSkill(ragefulblow.name)
 
     this.stats = {
       str: 28,
@@ -20,45 +18,87 @@ class Knight extends Adventurer {
       dmg: 0,
       asr: 0
     }
+
+    this.createSkill(ragefulblow)
+    this.setActiveSkill(ragefulblow.name)
+    this.updateActiveSkill()
+    this.init()
   }
 
-  setStats () {
-    super.setStats()
-
-    // Defense
-    this.stats_def.def = 1 * (this.stats.agi / 3)
-    this.stats_def.defRate = 1 * (this.stats.agi / 3)
-    this.stats_def.elemDef = 1 * (this.stats.agi / 3)
-    this.stats_def.elemDefRate = 1 * (this.stats.agi / 3)
-
-    // Attack
-    this.stats_atk.maxAtk = 1 * (this.stats.str / 4)
-    this.stats_atk.minAtk = 1 * (this.stats.str / 6)
-    this.stats_atk.maxWizPower = (1 * this.stats.ener / 4) + (this[this.skill_active].baseDamage * 1.5)
-    this.stats_atk.minWizPower = (1 * this.stats.ener / 9) + (this[this.skill_active].baseDamage * 1.5)
-    this.stats_atk.atkRate = (this.level / 5) + (1.5 * this.stats.agi) + (1 * this.stats.str / 4) // same
-    this.stats_atk.atkSpeed = 1 * (this.stats.agi / 15)
-    this.stats_atk.maxElemAtk = 1 * (this.stats.ener / 4)
-    this.stats_atk.minElemAtk = 1 * (this.stats.ener / 6)
-    this.stats_atk.elemAtkRate = (5 * this.level) + (1.5 * this.stats.agi) + (1 * this.stats.str / 4) // same
+  get defense () {
+    return 1 * (this.stats.agi / 3)
   }
 
-  setActiveStat (stat, points) {
-    super.setActiveStat(stat, points)
+  get defenseRate () {
+    return 1 * (this.stats.agi / 3)
+  }
 
-    if (stat === 'vit') {
-      this.stats.hp += (2 * this.level) + (3 * this.stats.vit)
-      this.setStatAG()
-    }
+  get elemDef () {
+    return 1 * (this.stats.agi / 3)
+  }
 
-    if (stat === 'ener') {
-      this.stats.mana += (1 * this.level) + (1 * this.stats.ener)
-      this.setStatAG()
-    }
+  get elemDefRate () {
+    return 1 * (this.stats.agi / 3)
+  }
 
-    if (['str', 'agi'].includes(stat)) {
-      this.setStatAG()
-    }
+  get maxAtk () {
+    return 1 * (this.stats.str / 4)
+  }
+
+  get minAtk () {
+    return 1 * (this.stats.str / 6)
+  }
+
+  get maxWizPower () {
+    return (1 * this.stats.ener / 4) + (this[this.skill_active].skillDamage * 1.5)
+  }
+
+  get minWizPower () {
+    return (1 * this.stats.ener / 9) + (this[this.skill_active].skillDamage * 1.5)
+  }
+
+  get atkRate () {
+    return (this.level / 5) + (1.5 * this.stats.agi) + (1 * this.stats.str / 4)
+  }
+
+  get atkSpeed () {
+    return 1 * (this.stats.agi / 15)
+  }
+
+  get maxElemAtk () {
+    return 1 * (this.stats.ener / 4)
+  }
+
+  get minElemAtk () {
+    return 1 * (this.stats.ener / 6)
+  }
+
+  get elemAtkRate () {
+    return (5 * this.level) + (1.5 * this.stats.agi) + (1 * this.stats.str / 4)
+  }
+
+  get hp () {
+    return (this.level === 1)
+      ? this.stats.hp
+      : this.stats.hp + (2 * this.level) + (3 * this.stats.vit)
+  }
+
+  get mana () {
+    return (this.level === 1)
+      ? this.stats.mana
+      : this.stats.mana + (1 * this.level) + (1 * this.stats.ener)
+  }
+
+  get ag () {
+    return (this.level === 1)
+      ? this.stats.ag
+      : this.stats.ag + (0.15 * this.stats.str) + (1 * this.stats.agi / 5) + (1 * this.stats.vit / 3) + (1 * this.stats.ener)
+  }
+
+  get sd () {
+    return (this.level === 1)
+      ? this.stats.sd
+      : this.stats.sd + (1.2 * this.level) + (1 * this.defense / 2)
   }
 }
 

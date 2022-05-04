@@ -7,9 +7,6 @@ const { Spider } = require('./classes/enemy')
 console.log('-------- GAME START --------')
 
 const player = new Wizard({ name: 'player' })
-player.set({ level: 5 })
-player.setStats('ener', player.points, true)
-player.setActiveSkill('ManaGlaive')
 const spider = new Spider({ level: 3 })
 
 let turn = 1
@@ -18,8 +15,8 @@ while (!spider.isDefeated() && !player.isDefeated()) {
   console.log(`\n--- BATTLE AT TURN # ${turn}`)
   player.skill_attack()
 
-  if (player.stats.asr > 50) {
-    spider.takeDamage(player.stats.dmg)
+  if (player.battle.asr > 50) {
+    spider.takeDamage(player.battle.dmg)
   }
 
   if (!spider.isDefeated()) {
@@ -34,7 +31,7 @@ while (!spider.isDefeated() && !player.isDefeated()) {
 
 console.log(`---Battle ended on TURN # ${turn}`)
 
-if (player.stats.hp > 0) {
+if (player.battle.hp > 0) {
   console.log('PLAYER wins')
 }
 

@@ -42,8 +42,7 @@ class Character {
     /** Accumulated points rewarded from leveling up */
     this.levelup_points = 0
 
-    /** Base Stats for reference only.
-     * Use the getters to get updated values everytime. */
+    /** Base Stats */
     this.stats = {
       /** Strength */
       str: 1,
@@ -172,9 +171,9 @@ class Character {
 
   // Normal (Physical) attack
   attack () {
-    this.battle.asr = this.attackSuccessRate()
-    this.battle.dmg = this.maxAtk
-    console.log(`[${this.name}] attacking, dmg: ${this.battle.dmg}, asr: ${this.battle.asr}%`)
+    this.stats.asr = this.attackSuccessRate()
+    this.stats.dmg = this.maxAtk
+    console.log(`[${this.name}] attacking, dmg: ${this.stats.dmg}, asr: ${this.stats.asr}%`)
   }
 
   // Active skill attack
@@ -188,14 +187,14 @@ class Character {
 
       let allow = (this.class === CHARACTER_TYPES.PLAYER)
       if (this.class !== CHARACTER_TYPES.PLAYER) {
-        allow = (this.mana - this[this.skill_active].mana_cost > 0)
+        allow = (this.stats.mana - this[this.skill_active].mana_cost > 0)
       }
 
       if (allow) {
-        this.battle.asr = this.attackSuccessRate()
-        this.battle.dmg = (this.maxWizPower !== 0) ? this.maxWizPower : this.maxElemAtk
+        this.stats.asr = this.attackSuccessRate()
+        this.stats.dmg = (this.maxWizPower !== 0) ? this.maxWizPower : this.maxElemAtk
         this[this.skill_active].cast()
-        console.log(`[${this.name}] attacking, dmg: ${this.battle.dmg}, asr: ${this.battle.asr}%`)
+        console.log(`[${this.name}] attacking, dmg: ${this.stats.dmg}, asr: ${this.stats.asr}%`)
       } else {
         console.log('Insufficient mana. Cannot cast skill.')
         this.attack()
@@ -223,7 +222,7 @@ class Character {
   /**
    * Update (increment/decrement) a (main) stat point
    * @param {String} stat - Stat name (str, agi, vit, ener)
-   * @param {Number} points - (+/-) Stat points Number value
+   * @param {Number} points - (+/-) Number values
    * @param {Bool} usePoints - Flag to use the accumulated "this.levelup_points" during level-up
    */
   setMainStat (stat, points, usePoints = false) {
@@ -232,8 +231,7 @@ class Character {
         this.levelup_points -= points
 
         this.stats[stat] += points
-        this.stats.sd += (1.2 * points)
-        this.battle.sd += (1.2 * points)
+        this.stat.sd += (1.2 * points)
         this.battle.ag = this.ag
 
         switch (stat) {
@@ -255,42 +253,40 @@ class Character {
 
   // Set the numerator for the skill dmg multiplier (if any)
   updateActiveSkill () {
-    this[this.skill_active].stat_pool = this.stats[this[this.skill_active].stat]
+    switch (this[this.skill_active].stat) {
+    case 'ener':
+      this[this.skill_active].stat_pool = this.stats.ener
+      break
+    case 'str':
+      this[this.skill_active].stat_pool = this.stats.str
+      break
+    case 'agi':
+      this[this.skill_active].stat_pool = this.stats.agi
+      break
+    default: break
+    }
   }
 
-  /**
-   * Update the mutable stats on level-up.
-   * Characters gain (POINTS_PER_LEVEL * levels) points per level-up. They can use
-   * these points to increase their Main Stat points.wwwwww
-   * @param {Number} levels - Character level
-   */
   onLevelUp (levels) {
     this.levelup_points += POINTS_PER_LEVEL * levels
 
-    // Instant-refill the battle stats with updated values
+    // Instant-refill the battle stats
     this.battle.hp = this.hp
     this.battle.mana = this.mana
     this.battle.sd = this.sd
   }
 
-  // Compute a random-value attack success rate
-  // TO-DO: Finalize the actual computation
   attackSuccessRate () {
     const max = 100
     const min = 1
     return Math.random() * (max - min) + min
   }
 
-  /**
-   * Decrease the Character's (mutable) hp by a certain amount
-   * @param {Number} damage - Amount of damage
-   */
   takeDamge (damage) {
     this.battle.hp -= damage
     console.log(`[${this.name}] take damage ${damage}, hp: ${this.battle.hp}`)
   }
 
-  // Checks if the Character is still alive
   isDefeated () {
     if (this.class === CHARACTER_TYPES.PLAYER) {
       // Immortal ^_^
