@@ -8,23 +8,24 @@ console.log('-------- GAME START --------')
 
 const player = new Wizard({ name: 'player' })
 player.set({ level: 5 })
+player.setStats('ener', player.points, true)
 player.setActiveSkill('ManaGlaive')
-const spider = new Spider({ level: 8 })
+const spider = new Spider({ level: 3 })
 
 let turn = 1
 
 while (!spider.isDefeated() && !player.isDefeated()) {
-  console.log(`--- BATTLE AT TURN # ${turn}`)
+  console.log(`\n--- BATTLE AT TURN # ${turn}`)
   player.skill_attack()
 
-  if (player.activeStats.asr > 50) {
-    spider.takeDamage(player.activeStats.dmg)
+  if (player.stats.asr > 50) {
+    spider.takeDamage(player.stats.dmg)
   }
 
   if (!spider.isDefeated()) {
     spider.attack()
-    if (spider.activeStats.asr > 50) {
-      player.takeDamge(spider.activeStats.dmg)
+    if (spider.stats.asr > 50) {
+      player.takeDamge(spider.stats.dmg)
     }
   }
 
@@ -33,14 +34,14 @@ while (!spider.isDefeated() && !player.isDefeated()) {
 
 console.log(`---Battle ended on TURN # ${turn}`)
 
-if (player.activeStats.hp > 0) {
+if (player.stats.hp > 0) {
   console.log('PLAYER wins')
 }
 
-if (spider.activeStats.hp > 0) {
+if (spider.stats.hp > 0) {
   console.log('ENEMY wins')
 }
 
-if (player.activeStats.hp <= 0 && spider.activeStats.hp <= 0) {
+if (player.stats.hp <= 0 && spider.stats.hp <= 0) {
   console.log('NO WINNER. ALL DEDZ.')
 }

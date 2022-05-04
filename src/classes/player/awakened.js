@@ -48,8 +48,21 @@ class Awakened extends Character {
       ener: 2000
     }
 
-    this.activeStats = params.activeStats
+    this.stats = {
+      str: 36,
+      agi: 36,
+      vit: 30,
+      ener: 60,
+      hp: 120,
+      mana: 120,
+      ag: 42,
+      sd: 150,
+      dmg: 0,
+      asr: 0
+    }
+
     this.init(params, newClass)
+    this.setStats()
   }
 
   init (params, newClass) {
@@ -99,18 +112,10 @@ class Awakened extends Character {
     }
 
     // Increment the Awakened stats
-    Object.keys(temp.stats).forEach(item => {
+    this.mainstats.forEach(item => {
       const bonus = 400
       const tempStat = temp.stats[item] + bonus
-      this.updateStats(item, tempStat)
-
-      if (item === 'vit') {
-        this.activeStats.hp += tempStat
-      }
-
-      if (item === 'ener') {
-        this.activeStats.mana += tempStat
-      }
+      this.stats[item] = tempStat
     })
 
     temp = null
@@ -126,6 +131,45 @@ class Awakened extends Character {
     }
 
     super.updateStats(stat, points)
+  }
+
+  setStats () {
+    super.setStats()
+
+    // Defense
+    this.stats_def.def = 1 * (this.stats.agi / 4)
+    this.stats_def.defRate = 1 * (this.stats.agi / 3)
+    this.stats_def.elemDef = 1 * (this.stats.agi / 4)
+    this.stats_def.elemDefRate = 1 * (this.stats.agi / 3)
+
+    // Attack
+    this.stats_atk.maxAtk = 1 * (this.stats.str / 8)
+    this.stats_atk.minAtk = 1 * (this.stats.str / 16)
+    this.stats_atk.maxWizPower = (1 * this.stats.ener / 8) + (this[this.skill_active].baseDamage * 3)
+    this.stats_atk.minWizPower = (1 * this.stats.ener / 18) + (this[this.skill_active].baseDamage * 3)
+    this.stats_atk.atkRate = (this.level / 10) + (3 * this.stats.agi) + (1 * this.stats.str / 8)
+    this.stats_atk.atkSpeed = 1 * (this.stats.agi / 15)
+    this.stats_atk.maxElemAtk = 1 * (this.stats.ener / 12)
+    this.stats_atk.minElemAtk = 1 * (this.stats.ener / 18)
+    this.stats_atk.elemAtkRate = (10 * this.level) + (3 * this.stats.agi) + (1 * this.stats.str / 8)
+  }
+
+  setActiveStat (stat, points) {
+    super.setActiveStat(stat, points)
+
+    if (stat === 'vit') {
+      this.stats.hp += (1 * this.level) + (1 * this.stats.vit)
+      this.setStatAG()
+    }
+
+    if (stat === 'ener') {
+      this.stats.mana += (2 * this.level) + (2 * this.stats.ener)
+      this.setStatAG()
+    }
+
+    if (['str', 'agi'].includes(stat)) {
+      this.setStatAG()
+    }
   }
 }
 
