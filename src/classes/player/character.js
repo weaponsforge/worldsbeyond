@@ -188,7 +188,7 @@ class Character {
 
       let allow = (this.class === CHARACTER_TYPES.PLAYER)
       if (this.class !== CHARACTER_TYPES.PLAYER) {
-        allow = (this.mana - this[this.skill_active].mana_cost > 0)
+        allow = (this.battle.mana - this[this.skill_active].mana_cost > 0)
       }
 
       if (allow) {

@@ -14,21 +14,21 @@ const avatarr = new Elf({ name: 'avatar' })
 const traveler = new Character({ name: 'player_one' })
 
 try {
-  tarrent.updateStats('ener', 500)
+  tarrent.setMainStat('ener', 500)
   tarrent.set({ guild: 'kobalos', level: 99 })
 } catch (err) {
   console.log(`ERROR: ${err.message}`)
 }
 
 try {
-  hellios.updateStats('str', 110)
+  hellios.setMainStat('str', 110)
   hellios.log()
 } catch (err) {
   console.log(`ERROR: ${err.message}`)
 }
 
 try {
-  traveler.updateStats('str', 5000)
+  traveler.setMainStat('str', 5000)
   traveler.log()
 } catch (err) {
   console.log(`ERROR: ${err.message}`)
