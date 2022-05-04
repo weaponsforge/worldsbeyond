@@ -209,6 +209,10 @@ class Character {
    * @param {Skill} skill - Class definition of a new skill
    */
   createSkill (skill) {
+    if (this.mana < skill.mana_cost) {
+      throw new Error('Insufficient mana. Cannot equip skill.')
+    }
+
     this[skill.name] = skill
     this.skills.push(skill.name)
   }
@@ -218,6 +222,10 @@ class Character {
    * @param {String} skill - Skill name
    */
   setActiveSkill (skillName) {
+    if (this[skillName] === undefined) {
+      throw new Error('Undefined skill.')
+    }
+
     this.skill_active = skillName
   }
 
@@ -240,6 +248,7 @@ class Character {
         switch (stat) {
         case 'ener':
           this.battle.mana = this.mana
+          this.updateActiveSkill()
           break
         case 'vit':
           this.battle.hp = this.hp
@@ -254,9 +263,12 @@ class Character {
     }
   }
 
-  // Set the numerator for the skill dmg multiplier (if any)
-  updateActiveSkill () {
-    this[this.skill_active].stat_pool = this.stats[this[this.skill_active].stat]
+  /**
+   * Set the numerator for the skill dmg multiplier (if any)
+   * @param {Number} pool - Total str/agi/ener/vit
+   */
+  updateActiveSkill (pool = 0) {
+    this[this.skill_active].stat_pool = pool ?? this.stats[this[this.skill_active].stat]
   }
 
   /**
