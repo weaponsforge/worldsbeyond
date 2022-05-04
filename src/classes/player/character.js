@@ -194,6 +194,7 @@ class Character {
       if (allow) {
         this.battle.asr = this.attackSuccessRate()
         this.battle.dmg = (this.maxWizPower !== 0) ? this.maxWizPower : this.maxElemAtk
+        this.battle.mana -= this[this.skill_active].mana_cost
         this[this.skill_active].cast()
         console.log(`[${this.name}] attacking, dmg: ${this.battle.dmg}, asr: ${this.battle.asr}%`)
       } else {
