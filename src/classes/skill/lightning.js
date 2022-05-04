@@ -1,18 +1,20 @@
 const Skill = require('./skill')
 const { CLASSES, CHARACTER_TYPES, SKILL_TYPES } = require('../../utils/constants')
 
-class EnergyBall extends Skill {
+class Lightning extends Skill {
   constructor () {
     super({
-      name: 'EnergyBall',
-      mana_cost: 1,
+      name: 'Lightning',
+      mana_cost: 72,
+      ag_cost: 10,
       classes: [CLASSES.WIZARD, CHARACTER_TYPES.AWAKENED, CHARACTER_TYPES.PLAYER],
-      skillDamage: 3,
+      skillDamage: 17,
       range: 6,
+      multiplier: 40,
       type: SKILL_TYPES.WIND,
       stat: 'ener'
     })
   }
 }
 
-module.exports = EnergyBall
+module.exports = Lightning
