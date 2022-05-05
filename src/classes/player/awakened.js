@@ -186,8 +186,6 @@ class Awakened extends Character {
     default: break
     }
 
-    this.updateActiveSkill()
-
     // Increment the Awakened stats
     Object.keys(this.stats).forEach(item => {
       const bonus = 400
@@ -196,6 +194,7 @@ class Awakened extends Character {
     })
 
     temp = null
+    this.updateActiveSkill()
     super.init()
   }
 
