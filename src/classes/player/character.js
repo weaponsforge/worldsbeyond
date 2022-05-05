@@ -239,27 +239,25 @@ class Character {
     if (usePoints) {
       if (this.levelup_points - points >= 0) {
         this.levelup_points -= points
-
-        this.stats[stat] += points
-        this.stats.sd += (1.2 * points)
-        this.battle.sd += (1.2 * points)
-        this.battle.ag = this.ag
-
-        switch (stat) {
-        case 'ener':
-          this.battle.mana = this.mana
-          this.updateActiveSkill()
-          break
-        case 'vit':
-          this.battle.hp = this.hp
-          break
-        default: break
-        }
       } else {
         throw new Error('Insufficient level-up points.')
       }
-    } else {
-      this.stats[stat] = points
+    }
+
+    this.stats[stat] += points
+    this.stats.sd += (1.2 * points)
+    this.battle.sd += (1.2 * points)
+    this.battle.ag = this.ag
+
+    switch (stat) {
+    case 'ener':
+      this.battle.mana = this.mana
+      this.updateActiveSkill()
+      break
+    case 'vit':
+      this.battle.hp = this.hp
+      break
+    default: break
     }
   }
 
