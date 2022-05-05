@@ -198,7 +198,7 @@ class Awakened extends Character {
     super.init()
   }
 
-  setMainStat (stat, points) {
+  setMainStat (stat, points, usePoints = false) {
     if (this.stats[stat] === undefined) {
       throw new Error('Undefined stat.')
     }
@@ -207,7 +207,7 @@ class Awakened extends Character {
       throw new Error('Cannot increase stat further.')
     }
 
-    super.setMainStat(stat, points)
+    super.setMainStat(stat, points, usePoints)
   }
 }
 
