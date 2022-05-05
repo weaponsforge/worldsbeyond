@@ -50,11 +50,11 @@ class Wizard extends Adventurer {
   }
 
   get maxWizPower () {
-    return (1 * this.stats.ener / 4) + (this[this.skill_active].finalDamage() * 1.5)
+    return (1 * this.stats.ener / 4) + (this[this.active_skill].finalDamage() * 1.5)
   }
 
   get minWizPower () {
-    return (1 * this.stats.ener / 9) + this[this.skill_active].finalDamage()
+    return (1 * this.stats.ener / 9) + this[this.active_skill].finalDamage()
   }
 
   get atkRate () {

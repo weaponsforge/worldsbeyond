@@ -9,9 +9,13 @@ const {
 console.log('-------- GAME START --------')
 
 let tarrent = new Wizard({ name: 'tarrent' })
-const hellios = new Knight({ name: 'hellios' })
 const avatarr = new Elf({ name: 'avatar' })
 const traveler = new Character({ name: 'player_one' })
+
+const hellios = new Knight({ name: 'hellios' })
+hellios.set({ level: 30 })
+hellios.setMainStat('ener', hellios.levelup_points, true)
+hellios.logStats()
 
 try {
   tarrent.setMainStat('ener', 500)

@@ -1,5 +1,5 @@
 const Adventurer = require('./adventurer')
-const { ragefulblow } = require('../skill')
+const { cyclone } = require('../skill')
 const { CLASSES } = require('../../utils/constants')
 
 class Knight extends Adventurer {
@@ -19,8 +19,8 @@ class Knight extends Adventurer {
       asr: 0
     }
 
-    this.createSkill(ragefulblow)
-    this.setActiveSkill(ragefulblow.name)
+    this.createSkill(cyclone)
+    this.setActiveSkill(cyclone.name)
     this.updateActiveSkill()
     this.init()
   }
@@ -50,11 +50,11 @@ class Knight extends Adventurer {
   }
 
   get maxWizPower () {
-    return (1 * this.stats.ener / 4) + (this[this.skill_active].skillDamage * 1.5)
+    return (1 * this.stats.ener / 4) + (this[this.active_skill].finalDamage() * 1.5)
   }
 
   get minWizPower () {
-    return (1 * this.stats.ener / 9) + (this[this.skill_active].skillDamage * 1.5)
+    return (1 * this.stats.ener / 9) + (this[this.active_skill].finalDamage() * 1.5)
   }
 
   get atkRate () {

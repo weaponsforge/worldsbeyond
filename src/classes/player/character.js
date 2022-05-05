@@ -37,7 +37,7 @@ class Character {
     this.skills = params.skills ?? []
 
     /** Current Active Skill */
-    this.skill_active = ''
+    this.active_skill = ''
 
     /** Accumulated points rewarded from leveling up */
     this.levelup_points = 0
@@ -146,7 +146,7 @@ class Character {
 
   /**
    * Set the values of first-level Object properties
-   * @param {Object} params { name, level, server, guild, class, skill_active }
+   * @param {Object} params { name, level, server, guild, class, active_skill }
    */
   set (params) {
     if (params === undefined) {
@@ -179,23 +179,23 @@ class Character {
 
   // Active skill attack
   skill_attack () {
-    if (this.skill_active === '') {
+    if (this.active_skill === '') {
       this.attack()
     } else {
-      if (this[this.skill_active] === undefined) {
+      if (this[this.active_skill] === undefined) {
         throw new Error('Undefined skill.')
       }
 
       let allow = (this.class === CHARACTER_TYPES.PLAYER)
       if (this.class !== CHARACTER_TYPES.PLAYER) {
-        allow = (this.battle.mana - this[this.skill_active].mana_cost > 0)
+        allow = (this.battle.mana - this[this.active_skill].mana_cost > 0)
       }
 
       if (allow) {
         this.battle.asr = this.attackSuccessRate()
         this.battle.dmg = (this.maxWizPower !== 0) ? this.maxWizPower : this.maxElemAtk
-        this.battle.mana -= this[this.skill_active].mana_cost
-        this[this.skill_active].cast()
+        this.battle.mana -= this[this.active_skill].mana_cost
+        this[this.active_skill].cast()
         console.log(`[${this.name}] attacking, dmg: ${this.battle.dmg}, asr: ${this.battle.asr}%`)
       } else {
         console.log('Insufficient mana. Cannot cast skill.')
@@ -210,7 +210,7 @@ class Character {
    */
   createSkill (skill) {
     if (this.mana < skill.mana_cost) {
-      throw new Error('Insufficient mana. Cannot equip skill.')
+      throw new Error(`Insufficient mana points. Cannot equip skill [${skill.name}].`)
     }
 
     this[skill.name] = skill
@@ -226,7 +226,7 @@ class Character {
       throw new Error('Undefined skill.')
     }
 
-    this.skill_active = skillName
+    this.active_skill = skillName
   }
 
   /**
@@ -268,7 +268,9 @@ class Character {
    * @param {Number} pool - Total str/agi/ener/vit
    */
   updateActiveSkill (pool = 0) {
-    this[this.skill_active].stat_pool = pool ?? this.stats[this[this.skill_active].stat]
+    this[this.active_skill].stat_pool = pool > 0
+      ? pool
+      : this.stats[this[this.active_skill].stat]
   }
 
   /**

@@ -68,7 +68,7 @@ class Skill {
     const pool = (statLvl !== undefined) ? statLvl : this.stat_pool
 
     return this.multiplier > 1
-      ? this.skillDamage + (1 * pool / this.multiplier)
+      ? this.skillDamage + Math.floor(1 * pool / this.multiplier)
       : this.skillDamage
   }
 

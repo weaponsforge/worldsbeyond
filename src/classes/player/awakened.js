@@ -89,11 +89,11 @@ class Awakened extends Character {
   }
 
   get maxWizPower () {
-    return (1 * this.stats.ener / 2) + (this[this.skill_active].finalDamage() * 0.5)
+    return (1 * this.stats.ener / 2) + (this[this.active_skill].finalDamage() * 0.5)
   }
 
   get minWizPower () {
-    return (1 * this.stats.ener / 4) + this[this.skill_active].finalDamage()
+    return (1 * this.stats.ener / 4) + this[this.active_skill].finalDamage()
   }
 
   get atkRate () {
@@ -186,6 +186,8 @@ class Awakened extends Character {
     default: break
     }
 
+    this.updateActiveSkill()
+
     // Increment the Awakened stats
     Object.keys(this.stats).forEach(item => {
       const bonus = 400
@@ -194,6 +196,7 @@ class Awakened extends Character {
     })
 
     temp = null
+    super.init()
   }
 
   setMainStat (stat, points) {

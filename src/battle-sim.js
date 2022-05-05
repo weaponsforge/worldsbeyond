@@ -1,7 +1,4 @@
-const {
-  Wizard
-} = require('./classes/player')
-
+const { Wizard } = require('./classes/player')
 const { Spider } = require('./classes/enemy')
 
 console.log('-------- GAME START --------')
