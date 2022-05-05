@@ -1,8 +1,19 @@
 const Character = require('./character')
-const { CLASSES, CHARACTER_TYPES } = require('../../utils/constants')
+const {
+  CLASSES,
+  CHARACTER_TYPES,
+  SKILLS_WIZARD, SKILLS_KNIGHT, SKILLS_ELF
+} = require('../../utils/constants')
+
+// Classes
 const Knight = require('./knight')
 const Wizard = require('./wizard')
 const Elf = require('./elf')
+
+// Skills
+const {
+  energyball, ragefulblow, shoot
+} = require('../skill')
 
 /**
  * A set of Character definitions for players that has finished Awakening.
@@ -37,52 +48,157 @@ class Awakened extends Character {
       ener: 2000
     }
 
+    this.stats = {
+      str: 36,
+      agi: 36,
+      vit: 30,
+      ener: 60,
+      hp: 120,
+      mana: 120,
+      ag: 42,
+      sd: 150,
+      dmg: 0,
+      asr: 0
+    }
+
     this.init(params, newClass)
   }
 
+  get defense () {
+    return (this.stats.agi / 2)
+  }
+
+  get defenseRate () {
+    return 1 * (this.stats.agi / 1.5)
+  }
+
+  get elemDef () {
+    return 1 * (this.stats.agi / 2)
+  }
+
+  get elemDefRate () {
+    return 1 * (this.stats.agi / 1.5)
+  }
+
+  get maxAtk () {
+    return 1 * (this.stats.str / 2)
+  }
+
+  get minAtk () {
+    return 1 * (this.stats.str / 4)
+  }
+
+  get maxWizPower () {
+    return (1 * this.stats.ener / 2) + (this[this.active_skill].finalDamage() * 0.5)
+  }
+
+  get minWizPower () {
+    return (1 * this.stats.ener / 4) + this[this.active_skill].finalDamage()
+  }
+
+  get atkRate () {
+    return (this.level / 2) + (0.5 * this.stats.agi) + (1 * this.stats.str / 2)
+  }
+
+  get atkSpeed () {
+    return 1 * (this.stats.agi / 5)
+  }
+
+  get maxElemAtk () {
+    return 1 * (this.stats.ener / 5)
+  }
+
+  get minElemAtk () {
+    return 1 * (this.stats.ener / 5)
+  }
+
+  get elemAtkRate () {
+    return (5 * this.level) + (1.5 * this.stats.agi) + (1 * this.stats.str / 4)
+  }
+
+  get hp () {
+    return (this.level === 1)
+      ? this.stats.hp
+      : this.stats.hp + (1 * this.level) + (1 * this.stats.vit)
+  }
+
+  get mana () {
+    return (this.level === 1)
+      ? this.stats.mana
+      : this.stats.mana + (2 * this.level) + (2 * this.stats.ener)
+  }
+
+  get ag () {
+    return (this.level === 1)
+      ? this.stats.ag
+      : this.stats.ag + (1 * this.stats.str / 5) + (0.4 * this.stats.agi) + (1 * this.stats.vit / 3) + (1 * this.stats.ener / 5)
+  }
+
+  get sd () {
+    return (this.level === 1)
+      ? this.stats.sd
+      : this.stats.sd + (1.2 * this.level) + (1 * this.defense / 2)
+  }
+
   init (params, newClass) {
-    // Set the basic skill from previous Class
+    this.class = CHARACTER_TYPES.AWAKENED
+    this.paths.push(newClass)
+    let skills = []
+
+    // Copy the skills from previous Class
     switch (params.class) {
     case CLASSES.WIZARD:
-      this.energyball = params.energyball
+      skills = Object.values(SKILLS_WIZARD)
       break
     case CLASSES.KNIGHT:
-      this.ragefulblow = params.ragefulblow
+      skills = Object.values(SKILLS_KNIGHT)
       break
     case CLASSES.ELF:
-      this.shoot = params.shoot
+      skills = Object.values(SKILLS_ELF)
       break
     default: break
     }
 
-    // Set the Awakened Skills
+    skills.forEach(skill => {
+      if (params[skill] !== undefined) {
+        this[skill] = params[skill]
+      }
+    })
+
+    // Set the Awakened (Basic) Skills
     let temp
     switch (newClass) {
     case CLASSES.KNIGHT:
       temp = new Knight({ name: 'temp' })
-      this.createSkill('ragefulblow', temp.ragefulblow)
-      this.setBasicSkill('ragefulblow')
+      this.createSkill(ragefulblow)
+      this.setActiveSkill(ragefulblow.name)
       break
     case CLASSES.WIZARD:
       temp = new Wizard({ name: 'temp' })
-      this.createSkill('energyball', temp.energyball)
-      this.setBasicSkill('energyball')
+      this.createSkill(energyball)
+      this.setActiveSkill(energyball.name)
       break
     case CLASSES.ELF:
       temp = new Elf({ name: 'temp' })
-      this.createSkill('shoot', temp.shoot)
-      this.setBasicSkill('shoot')
+      this.createSkill(shoot)
+      this.setActiveSkill(shoot.name)
       break
     default: break
     }
 
-    temp = null
+    // Increment the Awakened stats
+    Object.keys(this.stats).forEach(item => {
+      const bonus = 400
+      const tempStat = temp.stats[item] + bonus
+      this.stats[item] = tempStat
+    })
 
-    this.class = CHARACTER_TYPES.AWAKENED
-    this.paths.push(newClass)
+    temp = null
+    this.updateActiveSkill()
+    super.init()
   }
 
-  updateStats (stat, points) {
+  setMainStat (stat, points, usePoints = false) {
     if (this.stats[stat] === undefined) {
       throw new Error('Undefined stat.')
     }
@@ -91,7 +207,7 @@ class Awakened extends Character {
       throw new Error('Cannot increase stat further.')
     }
 
-    super.updateStats(stat, points)
+    super.setMainStat(stat, points, usePoints)
   }
 }
 

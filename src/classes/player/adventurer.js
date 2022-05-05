@@ -15,7 +15,7 @@ class Adventurer extends Character {
     }
   }
 
-  updateStats (stat, points) {
+  setMainStat (stat, points, usePoints = false) {
     if (this.stats[stat] === undefined) {
       throw new Error('Undefined stat.')
     }
@@ -24,7 +24,7 @@ class Adventurer extends Character {
       throw new Error('Cannot increase stat further.')
     }
 
-    super.updateStats(stat, points)
+    super.setMainStat(stat, points, usePoints)
   }
 }
 

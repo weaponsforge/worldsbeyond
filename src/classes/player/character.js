@@ -1,6 +1,10 @@
+const { CHARACTER_TYPES, POINTS_PER_LEVEL } = require('../../utils/constants')
+
 /**
- * Base Class of all Character classes
+ * Base Class of all Character classes.
+ * Somewhat follows Mu Online's game formulas and calculations.
  */
+
 class Character {
   constructor (params) {
     if (params === undefined) {
@@ -11,109 +15,331 @@ class Character {
       throw new Error('Must provide a character name.')
     }
 
+    /** Character Name */
     this.name = params.name
+
+    /** Character Level (max: 400) */
     this.level = params.level ?? 1
-    this.server = params.server ?? 'bahr'
-    this.guild = params.guild ?? ''
+
+    /** Character Class */
     this.class = params.class ?? 'player'
-    this.paths = params.class ? [params.class] : [this.class]
-    this.skills = params.skills ?? ['walk', 'run', 'strike']
-    this.skill_basic = ''
 
-    this.stats = params.stats ?? {
-      str: 10,
-      agi: 10,
-      vit: 10,
-      ener: 10
+    /** Server Name */
+    this.server = params.server ?? 'bahr'
+
+    /** Guild Name */
+    this.guild = params.guild ?? ''
+
+    /** Character Classes (max 2 values if Awakened) */
+    this.paths = [this.class]
+
+    /** Character Skills List */
+    this.skills = params.skills ?? []
+
+    /** Current Active Skill */
+    this.active_skill = ''
+
+    /** Accumulated points rewarded from leveling up */
+    this.levelup_points = 0
+
+    /** Base Stats for reference only.
+     * Use the getters to get updated values everytime. */
+    this.stats = {
+      /** Strength */
+      str: 1,
+      /** Agility */
+      agi: 1,
+      /** Vitality */
+      vit: 1,
+      /** Energy */
+      ener: 1,
+      /** Health Points */
+      hp: 1,
+      /** Mana Points */
+      mana: 1,
+      /** Ability Gauge */
+      ag: 1,
+      /** Shield Defense */
+      sd: 1
+    }
+
+    // Dynamic, mutable stats
+    this.battle = {
+      hp: 1,
+      /** Mana Points */
+      mana: 1,
+      /** Ability Gauge */
+      ag: 1,
+      /** Shield Defense */
+      sd: 1,
+      /** Attack Success Rate (experimental) */
+      asr: 0,
+      /** Final Damage (experimental) */
+      dmg: 0
     }
   }
 
-  // Move towards a specified direction
-  walk () {
-    console.log('---walking...')
-  }
+  /** Physical Defense */
+  get defense () { return 0 }
 
-  // Move faster towards a specified direction
-  run () {
-    console.log('---running...')
-  }
+  /** Physical Defense Success Rate */
+  get defenseRate () { return 0 }
 
-  // Basic attack skill
-  strike () {
-    if (this.skill_basic === '') {
-      console.log('---strike!')
-    } else {
-      if (this[this.skill_basic] === undefined) {
-        throw new Error('Undefined skill.')
-      }
+  /** Elemental Defense */
+  get elemDef () { return 0 }
 
-      this[this.skill_basic]()
-    }
-  }
+  /** Elemental Defense Rate */
+  get elemDefRate () { return 0 }
 
-  /**
-   * Update (increment/decrement) a stat point
-   * @param {String} stat Stat name (str, agi, vit, ener)
-   * @param {Number} points (+/-) Number values
-   */
-  updateStats (stat, points) {
-    if (this.stats[stat] === undefined) {
-      throw new Error('Undefined stat.')
-    }
+  /** Maximum Physical Attack */
+  get maxAtk () { return 0 }
 
-    this.stats[stat] += points
+  /** Minimum Physical Attack */
+  get minAtk () { return 0 }
+
+  /** Maximum Wizardry Power */
+  get maxWizPower () { return 0 }
+
+  /** Minimum Wizardry Power */
+  get minWizPower () { return 0 }
+
+  /** Attack Success Rate (Physical Attack) */
+  get atkRate () { return 0 }
+
+  /** Attack Speed (Physical Attack) */
+  get atkSpeed () { return 0 }
+
+  /** Maximum Elemental Attack Power (Elemental Attack) */
+  get maxElemAtk () { return 0 }
+
+  /** Minimum Elemental Attack Power (Elemental Attack) */
+  get minElemAtk () { return 0 }
+
+  /** Attack Success Rate (Elemental) */
+  get elemAtkRate () { return 0 }
+
+  /** Max Health Points */
+  get hp () { return 0 }
+
+  /** Max Mana Points */
+  get mana () { return 0 }
+
+  /** Max Ability Gauge */
+  get ag () { return 0 }
+
+  /** Max Shield Defense */
+  get sd () { return 0 }
+
+  /** Attack Success Rate (experimental) */
+  get asr () { return 0 }
+
+  /** Final Damage (experimental) */
+  get dmg () { return 0 }
+
+  // Initialize the mutable stats
+  init () {
+    this.battle.hp = this.hp
+    this.battle.mana = this.mana
+    this.battle.ag = this.ag
+    this.battle.sd = this.sd
   }
 
   /**
    * Set the values of first-level Object properties
-   * @param {Object} params { name, level, server, guild, class, skill_basic }
+   * @param {Object} params { name, level, server, guild, class, active_skill }
    */
   set (params) {
     if (params === undefined) {
       throw new Error('Undefined parameters')
     }
 
-    const fields = Object.keys(this)
+    const fields = ['stats', 'paths', 'skills']
     const keys = Object.keys(params)
 
-    fields.splice(fields.indexOf('stats'), 1)
-    fields.splice(fields.indexOf('maxStats'), 1)
-    fields.splice(fields.indexOf('paths'), 1)
-    fields.splice(fields.indexOf('skill'), 1)
-
-    if (!keys.every(x => fields.includes(x))) {
-      throw new Error('Invalid parameter(s).')
-    }
-
-    fields.forEach(item => {
-      if (params[item] !== undefined) {
-        this[item] = params[item]
+    keys.forEach(item => {
+      if (this[item] !== undefined && !fields.includes(item)) {
+        if (item === 'level') {
+          this[item] = params[item]
+          this.onLevelUp(params[item])
+        } else {
+          this[item] = params[item]
+        }
+      } else {
+        throw new Error(`Invalid parameter '${item}'`)
       }
     })
   }
 
-  /**
-   * Set the basic (strike) skill
-   * @param {String} skill - Skill name
-   */
-  setBasicSkill (skill) {
-    if (!this.skills.includes(skill)) {
-      throw new Error('Undefined skill.')
-    }
+  // Normal (Physical) attack
+  attack () {
+    this.battle.asr = this.attackSuccessRate()
+    this.battle.dmg = this.maxAtk
+    console.log(`[${this.name}] attacking, dmg: ${this.battle.dmg}, asr: ${this.battle.asr}%`)
+  }
 
-    this.skill_basic = skill
+  // Active skill attack
+  skill_attack () {
+    if (this.active_skill === '') {
+      this.attack()
+    } else {
+      if (this[this.active_skill] === undefined) {
+        throw new Error('Undefined skill.')
+      }
+
+      let allow = (this.class === CHARACTER_TYPES.PLAYER)
+      if (this.class !== CHARACTER_TYPES.PLAYER) {
+        allow = (this.battle.mana - this[this.active_skill].mana_cost > 0)
+      }
+
+      if (allow) {
+        this.battle.asr = this.attackSuccessRate()
+        this.battle.dmg = (this.maxWizPower !== 0) ? this.maxWizPower : this.maxElemAtk
+        this.battle.mana -= this[this.active_skill].mana_cost
+        this[this.active_skill].cast()
+        console.log(`[${this.name}] attacking, dmg: ${this.battle.dmg}, asr: ${this.battle.asr}%`)
+      } else {
+        console.log('Insufficient mana. Cannot cast skill.')
+        this.attack()
+      }
+    }
   }
 
   /**
    * Create a new skill
-   * @param {String} skillName
-   * @param {Function} skill - Function definition of a new skill
+   * @param {Skill} skill - Class definition of a new skill
    */
-  createSkill (skillName, skill) {
-    this[skillName] = skill
-    this.skills.push(skillName)
+  createSkill (skill) {
+    if (this.mana < skill.mana_cost) {
+      throw new Error(`Insufficient mana points. Cannot equip skill [${skill.name}].`)
+    }
+
+    this[skill.name] = skill
+    this.skills.push(skill.name)
   }
 
+  /**
+   * Set the basic (skill_attack) skill.
+   * @param {String} skill - Skill name
+   */
+  setActiveSkill (skillName) {
+    if (this[skillName] === undefined) {
+      throw new Error('Undefined skill.')
+    }
+
+    this.active_skill = skillName
+  }
+
+  /**
+   * Update (increment/decrement) a (main) stat point
+   * @param {String} stat - Stat name (str, agi, vit, ener)
+   * @param {Number} points - (+/-) Stat points Number value
+   * @param {Bool} usePoints - Flag to use the accumulated "this.levelup_points" during level-up
+   */
+  setMainStat (stat, points, usePoints = false) {
+    if (usePoints) {
+      if (this.levelup_points - points >= 0) {
+        this.levelup_points -= points
+      } else {
+        throw new Error('Insufficient level-up points.')
+      }
+    }
+
+    this.stats[stat] += points
+    this.stats.sd += (1.2 * points)
+    this.battle.sd += (1.2 * points)
+    this.battle.ag = this.ag
+
+    switch (stat) {
+    case 'ener':
+      this.battle.mana = this.mana
+      this.updateActiveSkill()
+      break
+    case 'vit':
+      this.battle.hp = this.hp
+      break
+    default: break
+    }
+  }
+
+  /**
+   * Set the numerator for the skill dmg multiplier (if any)
+   * @param {Number} pool - Total str/agi/ener/vit
+   */
+  updateActiveSkill (pool = 0) {
+    this[this.active_skill].stat_pool = pool > 0
+      ? pool
+      : this.stats[this[this.active_skill].stat]
+  }
+
+  /**
+   * Update the mutable stats on level-up.
+   * Characters gain (POINTS_PER_LEVEL * levels) points per level-up. They can use
+   * these points to increase their Main Stat points.wwwwww
+   * @param {Number} levels - Character level
+   */
+  onLevelUp (levels) {
+    this.levelup_points += POINTS_PER_LEVEL * levels
+
+    // Instant-refill the battle stats with updated values
+    this.battle.hp = this.hp
+    this.battle.mana = this.mana
+    this.battle.sd = this.sd
+  }
+
+  // Compute a random-value attack success rate
+  // TO-DO: Finalize the actual computation
+  attackSuccessRate () {
+    const max = 100
+    const min = 1
+    return Math.random() * (max - min) + min
+  }
+
+  /**
+   * Decrease the Character's (mutable) hp by a certain amount
+   * @param {Number} damage - Amount of damage
+   */
+  takeDamge (damage) {
+    this.battle.hp -= damage
+    console.log(`[${this.name}] take damage ${damage}, hp: ${this.battle.hp}`)
+  }
+
+  // Checks if the Character is still alive
+  isDefeated () {
+    if (this.class === CHARACTER_TYPES.PLAYER) {
+      // Immortal ^_^
+      return false
+    } else {
+      return this.battle.hp <= 0
+    }
+  }
+
+  /**
+   * Return an Object of getters and their values
+   * @returns {Object} Returns the main stats and (getter) stats merged in an Object
+   */
+  getStats () {
+    const getters = Object.getOwnPropertyDescriptors(Character.prototype)
+    const obj = {}
+
+    for (const key in getters) {
+      if (key !== 'constructor' && typeof this[key] !== 'function') {
+        obj[key] = this[key]
+      }
+    }
+
+    return { ...this.stats, ...obj }
+  }
+
+  // Print the stats to console
+  logStats (full = true) {
+    if (!full) {
+      console.log(this.battle)
+    } else {
+      console.log(this.getStats())
+    }
+  }
+
+  // Print the class to console
   log () {
     console.log(`CHARACTER [${this.class}] "${this.name}"`)
     console.log(this)

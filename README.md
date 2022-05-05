@@ -2,7 +2,9 @@
 
 A game set in a medieval-fantasy setting where characters find their life's meaning and purpose, and the World's existence.
 
-All characters have a pre-defined roles and paths, except for a certain Character. Or several Characters.
+All `Classes` have pre-defined roles and paths, except for a certain `Character`. Or several `Characters`.
+
+> An experimental game testing the interaction of game classes, models, objects, and events on NodeJS.
 
 
 ### Requirements
@@ -25,13 +27,19 @@ The following software and dependencies were used during development. Feel free 
 
 1. Run the main program.  
 `npm start`
+2. Run the battle simulation.  
+`npm run battle`
 
 
-## Available Scrips
+## Available Scripts
 
 ### npm start
 
 Run the main program.
+
+### npm run battle
+
+Run the simulation battle program.
 
 ### npm run lint
 
