@@ -17,19 +17,34 @@ The following software and dependencies were used during development. Feel free 
 
 ## Installation
 
-1. Clone the repository.  
+1. Clone the repository.<br>
 `git clone worldsbeyond.git`
-2. Install dependencies.  
+2. Install dependencies.<br>
 `npm install`
 
 
 ## Usage
 
-1. Run the main program.  
+### Using Node
+
+1. Run the main program.<br>
 `npm start`
-2. Run the battle simulation.  
+2. Run the battle simulation.<br>
 `npm run battle`
 
+### Using Docker
+
+1. Build the image.<br>
+`docker build -t weaponsforge/worldsbeyond .`
+
+2. Run a container in detached mode.<br>
+`docker run -it --rm -d --name worldsbeyond weaponsforge/worldsbeyond`
+
+3. Run the battle simulation.<br>
+`docker exec -it worldsbeyond npm run battle`
+
+4. Stop the container.<br>
+`docker stop worldsbeyond`
 
 ## Available Scripts
 
@@ -49,5 +64,5 @@ Lint the source codes.
 
 Fix lint errors.
 
-@weaponsforge  
+@weaponsforge
 20220603
